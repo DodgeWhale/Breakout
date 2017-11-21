@@ -22,7 +22,9 @@ namespace Breakout
         int lives = 0;
         int points = 0;
 
+
         // Brick rows and columns
+        // Memes
         static int rows = 3, columns = 7;
 
         public GameForm()
@@ -65,6 +67,7 @@ namespace Breakout
                 this.lives = tempPoints - 50;
                 lives++;
             }
+            // Todo update label which displays points
         }
 
         public void InitializeBricks()
