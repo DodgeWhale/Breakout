@@ -1,0 +1,14 @@
+F:\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csprojResolveAssemblyReference.cache
+F:\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.Properties.Resources.resources
+F:\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csproj.GenerateResource.Cache
+F:\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csproj.CoreCompileInputs.cache
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csprojResolveAssemblyReference.cache
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.Properties.Resources.resources
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csproj.GenerateResource.Cache
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csproj.CoreCompileInputs.cache
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\bin\Debug\Breakout.exe.config
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\bin\Debug\Breakout.exe
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\bin\Debug\Breakout.pdb
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.exe
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.pdb
+\\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.GameForm.resources
