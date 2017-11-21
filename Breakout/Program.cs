@@ -17,8 +17,6 @@ namespace Breakout
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new GameForm());
-
-            Console.WriteLine("Hello world");
         }
     }
 }

@@ -11,10 +11,10 @@ namespace Breakout.Objects
     {
         public BrickColour colour;
 
-        private Random random = new Random();
-        private BrickColour[] colours = { BrickColour.BLACK, BrickColour.BLUE, BrickColour.GREEN, BrickColour.RED, BrickColour.YELLOW };
+        private static Random random = new Random();
+        private static BrickColour[] colours = { BrickColour.BLACK, BrickColour.BLUE, BrickColour.GREEN, BrickColour.RED, BrickColour.YELLOW };
 
-        public Brick(GameForm form, int x, int y, int width, int height) : base(form, x, y, width, height, null)
+        public Brick(Panel panel, int x, int y, int width, int height) : base(panel, null)
         {
             // Sets random colour
             this.colour = colours[random.Next(colours.Length)];
@@ -30,7 +30,7 @@ namespace Breakout.Objects
 
                 Tag = "BRICK"
             };
-            this.pictureBox = brick;
+            this.SetPictureBox(brick);
         }
 
         public BrickColour GetColour()

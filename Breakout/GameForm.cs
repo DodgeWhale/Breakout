@@ -13,7 +13,6 @@ namespace Breakout
 {
     public partial class GameForm : Form
     {
-
         private Timer timer;
 
         Paddle paddle;
@@ -28,19 +27,33 @@ namespace Breakout
         public GameForm()
         {
             InitializeComponent();
+            
+            paddle = new Paddle(GamePanel, GamePanel.Width / 2, GamePanel.Height - 20);
+            paddle.AddToPanel();
+            paddle.Centre(GamePanel.Height - 20);
 
-            int paddleWidth = 50;
-
-            paddle = new Paddle(this, (this.Width / 2) + paddleWidth / 2, this.Height - 20, paddleWidth, 20);
-            ball = new Ball(this, 10, 10, 10, 10); // TODO: Set specific x, y
+            ball = new Ball(GamePanel, 3); // TODO: Set specific x, y
+            ball.AddToPanel();
 
             InitializeBricks();
-            RestartTimer();
+
+            int current = 0;
+            for (int x = 0; x < columns; x++)
+            {
+                for (int y = 0; y < rows; y++)
+                {
+                    Console.Write("X: " + x + ", Y: " + y + " - " + this.bricks[x, y].GetColour().GetColour().ToString() + "\t");
+
+                    if (current != x) Console.WriteLine();
+                    current = x;
+                }
+            }
         }
 
         public void InstertCoin()
         {
             lives = 5; // Start
+            ball.ResetPosition();
         }
 
         public void AddPoints(int points)
@@ -55,28 +68,30 @@ namespace Breakout
 
         public void InitializeBricks()
         {
-            bricks = new Brick[rows, columns];
+            Brick[,] bricks = new Brick[columns, rows];
+            int padding = 10;
 
-            for(int x = 0; x < rows; x++)
+            for(int x = 0; x < columns; x++)
             {
-                for(int y = 0; y < columns; y++)
+                for(int y = 0; y < rows; y++)
                 {
-                    Console.WriteLine("X: " + x + ", Y: " + y);
-                    Brick brick = new Brick(this, x * 10, y * 10, 35, 15); ;
-                    brick.AddToForm();
+                    Brick brick = new Brick(GamePanel, x * 35 + (padding * (x + 1)), y * 15 + (padding * (y + 1)), 35, 15);
+                    brick.AddToPanel();
 
                     bricks[x, y] = brick;
                 }
             }
+            this.bricks = bricks;
         }
 
         private void RestartTimer()
         {
-            if(this.timer != null && this.timer.Enabled) this.timer.Stop();
+            if(this.timer != null && this.timer.Enabled)
+                this.timer.Stop();
 
             Timer timer = new Timer
             {
-                Interval = 5000,
+                Interval = 16,
                 Enabled = true,
             };
 
@@ -93,33 +108,42 @@ namespace Breakout
                 this.timer.Stop();
             }
 
-            for (int x = 0; x < rows; x++)
+            if(!ball.CheckPanelBoundries())
             {
-                for (int y = 0; y < columns; y++)
+                this.ball.Move();
+            } else
+            {
+                this.timer.Stop();
+                ball.ResetPosition();
+            }
+
+            for (int x = 0; x < columns; x++)
+            {
+                for (int y = 0; y < rows; y++)
                 {
-                    // Check collision
-                    // bricks[x][y].Draw(e);
+                    Brick target = bricks[x, y];
+
+                    if(target.CheckCollision(this.ball.GetPictureBox())) {
+                        if (!target.IsDead)
+                        {
+                            this.AddPoints(target.GetColour().GetPoints());
+                            target.SetDead(true);
+                        }
+                    }
                 }
             }
         }
 
-        // I THINK INVALIDATE CAUSES THE FORM TO REPAINT. THATS WHEN YOU RE RENDER THE BALL AND BRICKS AND STUFF
-        protected override void OnPaint(PaintEventArgs e)
+        private void InsertCoinButton_Click(object sender, EventArgs e)
         {
-            /* base.OnPaint(e);
-            _paddle.Draw(e);
-            {
-                for (int i = 0; i < _NumBalls; i++)
-                {
-                    _balls[i].Draw(e);
-                }
-                foreach (var blk in _blocks)
-                {
-                    blk.Draw(e);
-                }
-            } */
+            InstertCoin();
+            RestartTimer();
         }
 
+        private void DebugButton_Click(object sender, EventArgs e)
+        {
+            this.ball.UpdatePosition(10, 10);
+        }
 
     }
 }

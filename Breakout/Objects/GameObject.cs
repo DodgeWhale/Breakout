@@ -10,23 +10,21 @@ namespace Breakout.Objects
 {
     public abstract class GameObject
     {
-        public GameForm form;
-        private Rectangle rect;
+        private Panel panel;
         private Point velocity;
         public bool IsDead;
-        public PictureBox pictureBox;
+        private PictureBox pictureBox;
 
-        public GameObject(GameForm form, int x, int y, int width, int height, PictureBox pictureBox)
+        public GameObject(Panel panel, PictureBox pictureBox)
         {
-            this.form = form;
-            this.rect = new Rectangle(x, y, width, height);
+            this.panel = panel;
             this.pictureBox = pictureBox;
         }
 
-        public void AddToForm()
+        public void AddToPanel()
         {
             if(!this.IsDead)
-                this.form.Controls.Add(this.GetPictureBox());
+                this.GetPanel().Controls.Add(this.GetPictureBox());
         }
 
         public bool CheckCollision(PictureBox target)
@@ -34,9 +32,14 @@ namespace Breakout.Objects
             return this.GetPictureBox().Bounds.IntersectsWith(target.Bounds);
         }
 
+        public Panel GetPanel()
+        {
+            return this.panel;
+        }
+
         public Point GetPosition()
         {
-            return new Point(this.rect.X, this.rect.Y);
+            return new Point(this.GetPictureBox().Left, this.GetPictureBox().Top);
         }
         public void UpdatePosition(int x, int y)
         {
@@ -44,14 +47,14 @@ namespace Breakout.Objects
             this.GetPictureBox().Top = y;
         }
 
-        public Rectangle GetRect()
-        {
-            return this.rect;
-        }
-
         public PictureBox GetPictureBox()
         {
             return this.pictureBox;
+        }
+
+        public void SetPictureBox(PictureBox pictureBox)
+        {
+            this.pictureBox = pictureBox;
         }
 
         public Size GetDimentions()
@@ -59,10 +62,43 @@ namespace Breakout.Objects
             return new Size(this.GetPictureBox().Width, this.GetPictureBox().Height);
         }
 
-        public void UpdateDimentions(int width, int height, PaintEventArgs e)
+        public void UpdateDimentions(int width, int height)
         {
             this.GetPictureBox().Width = width;
             this.GetPictureBox().Height = height;
+        }
+        public void SetDead(bool isDead)
+        {
+            this.IsDead = isDead;
+            this.GetPictureBox().Visible = !isDead;
+        }
+
+        public void Centre(int y)
+        {
+            this.UpdatePosition((panel.Width - this.GetPictureBox().Width / 2) / 2, y);
+        }
+
+        public Point GetVelocity()
+        {
+            return this.velocity;
+        }
+
+        public void RandomVelocity()
+        {
+            Random random = new Random();
+            this.UpdateVelocity(random.Next(0, 2) * 2 - 1, random.Next(0, 2) * 2 - 1);
+        }
+
+        public void UpdateVelocity(int x, int y)
+        {
+            if (this.velocity == null)
+            {
+                this.velocity = new Point(x, y);
+                return;
+            }
+
+            this.velocity.X = x;
+            this.velocity.Y = y;
         }
 
     }

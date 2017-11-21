@@ -12,3 +12,13 @@ F:\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.csproj.CoreCompileInp
 \\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.exe
 \\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.pdb
 \\studenthome.hallam.shu.ac.uk\STUDENTHOME7\5\b7034135\MyWork\VS Projects\Breakout\Breakout\obj\Debug\Breakout.GameForm.resources
+J:\University\C++\Breakout\Breakout\bin\Debug\Breakout.exe.config
+J:\University\C++\Breakout\Breakout\bin\Debug\Breakout.exe
+J:\University\C++\Breakout\Breakout\bin\Debug\Breakout.pdb
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.csprojResolveAssemblyReference.cache
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.GameForm.resources
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.Properties.Resources.resources
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.csproj.GenerateResource.Cache
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.csproj.CoreCompileInputs.cache
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.exe
+J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.pdb
