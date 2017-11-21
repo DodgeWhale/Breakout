@@ -22,6 +22,7 @@ namespace Breakout
         int lives = 0;
         int points = 0;
 
+        // Brick rows and columns
         static int rows = 3, columns = 7;
 
         public GameForm()
