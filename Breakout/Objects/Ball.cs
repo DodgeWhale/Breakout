@@ -54,7 +54,7 @@ namespace Breakout.Objects
             if(position.X <= 0)
             {
                 velocity.X = 1;
-            } else if(position.X >= this.GetPanel().Width)
+            } else if(position.X + this.GetPictureBox().Width >= this.GetPanel().Width)
             {
                 velocity.X = -1;
             }

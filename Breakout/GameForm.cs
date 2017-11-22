@@ -1,12 +1,7 @@
 ﻿using Breakout.Objects;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Breakout
@@ -19,59 +14,82 @@ namespace Breakout
         Ball ball;
         Brick[,] bricks;
 
-        int lives = 0;
-        int points = 0;
+        int lives = 0,
+            points = 0,
+            totalPoints = 0;
 
-
-        // Brick rows and columns
-        // Memes
-        static int rows = 3, columns = 7;
+        int rows = 3, columns = 7;
 
         public GameForm()
         {
+            // Fixes laggy ball rendering
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
             InitializeComponent();
-            
+
             paddle = new Paddle(GamePanel, GamePanel.Width / 2, GamePanel.Height - 20);
             paddle.AddToPanel();
             paddle.Centre(GamePanel.Height - 20);
 
             ball = new Ball(GamePanel, 3); // TODO: Set specific x, y
             ball.AddToPanel();
-
-            InitializeBricks();
-
-            int current = 0;
-            for (int x = 0; x < columns; x++)
-            {
-                for (int y = 0; y < rows; y++)
-                {
-                    Console.Write("X: " + x + ", Y: " + y + " - " + this.bricks[x, y].GetColour().GetColour().ToString() + "\t");
-
-                    if (current != x) Console.WriteLine();
-                    current = x;
-                }
-            }
         }
 
         public void InstertCoin()
         {
-            lives = 5; // Start
+            SetLives(1); // Start
+            ResetGame();
+            InitializeBricks();
+            RestartTimer();
+        }
+
+        public void ResetGame()
+        {
             ball.ResetPosition();
         }
 
         public void AddPoints(int points)
         {
-            int tempPoints = this.lives + points;
-            if(tempPoints >= 50)
+            this.SetPoints(this.points + points);
+        } 
+
+        public void SetPoints(int points)
+        {
+            int lifeRate = 100;
+
+            if(points >= lifeRate)
             {
-                this.lives = tempPoints - 50;
-                lives++;
+                this.totalPoints += points;
+
+                this.points = points - lifeRate;
+                SetLives(this.lives + 1);
             }
-            // Todo update label which displays points
+
+            lbl_Points.Text = "Points: " + this.points;
+        }
+
+        public void SetLives(int lives)
+        {
+            this.lives = lives;
+            lbl_Lives.Text = "Lives: " + lives;
+
+            if(lives <= 0)
+            {
+                ResetGame();
+            }
         }
 
         public void InitializeBricks()
         {
+            // Clears the old bricks from the GamePanel for when the level is reset
+            if (this.bricks != null)
+            {
+                foreach (Brick brick in this.bricks)
+                {
+                    this.GamePanel.Controls.Remove(brick.GetPictureBox());
+                }
+            }
+
             Brick[,] bricks = new Brick[columns, rows];
             int padding = 10;
 
@@ -119,6 +137,13 @@ namespace Breakout
             {
                 this.timer.Stop();
                 ball.ResetPosition();
+                this.SetLives(this.lives - 1);
+            }
+
+            if(ball.CheckCollision(paddle.GetPictureBox()))
+            {
+                Point velocity = ball.GetVelocity();
+                ball.UpdateVelocity(velocity.X, -velocity.Y);
             }
 
             for (int x = 0; x < columns; x++)
@@ -141,12 +166,18 @@ namespace Breakout
         private void InsertCoinButton_Click(object sender, EventArgs e)
         {
             InstertCoin();
-            RestartTimer();
+        }
+
+        private void GamePanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(!paddle.IsDead)
+                paddle.UpdatePosition(e.X - paddle.GetPictureBox().Width / 2, paddle.GetPosition().Y);
         }
 
         private void DebugButton_Click(object sender, EventArgs e)
         {
-            this.ball.UpdatePosition(10, 10);
+            this.rows = 4;
+            this.columns = 9;
         }
 
     }
