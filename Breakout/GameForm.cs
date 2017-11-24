@@ -33,11 +33,14 @@ namespace Breakout
 
             ball = new Ball(GamePanel, 3); // TODO: Set specific x, y
             ball.AddToPanel();
+
+            Console.WriteLine(TESTMEMES.Left + ", " + TESTMEMES.Right + ", " + TESTMEMES.Top + ", " + TESTMEMES.Bottom);
         }
 
         public void InstertCoin()
         {
             SetLives(1); // Start
+            SetPoints(0);
             ResetGame();
             InitializeBricks();
             RestartTimer();
@@ -50,18 +53,18 @@ namespace Breakout
 
         public void AddPoints(int points)
         {
+            this.totalPoints += points;
             this.SetPoints(this.points + points);
         } 
 
         public void SetPoints(int points)
         {
             int lifeRate = 100;
+            this.points = points;
 
-            if(points >= lifeRate)
+            if (this.points >= lifeRate)
             {
-                this.totalPoints += points;
-
-                this.points = points - lifeRate;
+                this.points -= lifeRate;
                 SetLives(this.lives + 1);
             }
 
@@ -123,6 +126,8 @@ namespace Breakout
 
         private void TimerTick(object sender, EventArgs e)
         {
+            // TODO && lives == 0
+            // Show insert coin button
             if(ball == null || ball.IsDead)
             {
                 // You lost
@@ -157,6 +162,38 @@ namespace Breakout
                         {
                             this.AddPoints(target.GetColour().GetPoints());
                             target.SetDead(true);
+
+                            PictureBox brickPicture = target.GetPictureBox();
+                            PictureBox ballPicture = this.ball.GetPictureBox();
+
+                            Point velocity = ball.GetVelocity();
+
+                            Console.WriteLine(ballPicture.Right + ", " + brickPicture.Left);
+                            Console.WriteLine(ballPicture.Left + ", " + brickPicture.Right);
+                            Console.WriteLine("-----");
+
+                            int panelWidth = this.GamePanel.Width,
+                                ballRight = panelWidth - (ballPicture.Left + ballPicture.Width),
+                                brickRight = panelWidth - (brickPicture.Left + brickPicture.Width);
+
+                            // this.timer.Stop();
+
+                            if (ballRight < brickPicture.Left || ballPicture.Left > brickRight)
+                            {
+                                ball.UpdateVelocity(-velocity.X, velocity.Y);
+                            } else
+                            {
+                                ball.UpdateVelocity(velocity.X, -velocity.Y);
+                            }
+
+                            /* if (ballPicture.Left + (ballPicture.Width / 2) < brickPicture.Left
+                                || ballPicture.Right - (ballPicture.Width / 2) < brickPicture.Right)
+                            {
+                                ball.UpdateVelocity(-velocity.X, velocity.Y);
+                            } else
+                            {
+                                ball.UpdateVelocity(velocity.X, -velocity.Y);
+                            } */
                         }
                     }
                 }
@@ -165,7 +202,8 @@ namespace Breakout
 
         private void InsertCoinButton_Click(object sender, EventArgs e)
         {
-            InstertCoin();
+            if(this.lives == 0)
+                InstertCoin();
         }
 
         private void GamePanel_MouseMove(object sender, MouseEventArgs e)

@@ -33,11 +33,15 @@
             this.InsertCoinButton = new System.Windows.Forms.Button();
             this.lbl_Points = new System.Windows.Forms.Label();
             this.lbl_Lives = new System.Windows.Forms.Label();
+            this.TESTMEMES = new System.Windows.Forms.PictureBox();
+            this.GamePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TESTMEMES)).BeginInit();
             this.SuspendLayout();
             // 
             // GamePanel
             // 
             this.GamePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GamePanel.Controls.Add(this.TESTMEMES);
             this.GamePanel.Location = new System.Drawing.Point(12, 12);
             this.GamePanel.Name = "GamePanel";
             this.GamePanel.Size = new System.Drawing.Size(485, 324);
@@ -84,6 +88,14 @@
             this.lbl_Lives.TabIndex = 4;
             this.lbl_Lives.Text = "Lives: 0";
             // 
+            // TESTMEMES
+            // 
+            this.TESTMEMES.Location = new System.Drawing.Point(0, 0);
+            this.TESTMEMES.Name = "TESTMEMES";
+            this.TESTMEMES.Size = new System.Drawing.Size(70, 35);
+            this.TESTMEMES.TabIndex = 0;
+            this.TESTMEMES.TabStop = false;
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -97,6 +109,8 @@
             this.DoubleBuffered = true;
             this.Name = "GameForm";
             this.Text = "Breakout";
+            this.GamePanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.TESTMEMES)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,6 +123,7 @@
         private System.Windows.Forms.Button InsertCoinButton;
         private System.Windows.Forms.Label lbl_Points;
         private System.Windows.Forms.Label lbl_Lives;
+        private System.Windows.Forms.PictureBox TESTMEMES;
     }
 }
 
