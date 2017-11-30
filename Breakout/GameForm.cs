@@ -124,11 +124,6 @@ namespace Breakout
             this.timer = timer;
         }
 
-        public void intersectsCircle()
-        {
-
-        }
-
         private void TimerTick(object sender, EventArgs e)
         {
             // TODO && lives == 0
