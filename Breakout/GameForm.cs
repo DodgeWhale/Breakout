@@ -35,6 +35,7 @@ namespace Breakout
             ball.AddToPanel();
         }
 
+        // Consider putting "Insert coin" in either a new panel or a different form entirely
         public void InstertCoin()
         {
             SetLives(1); // Start
@@ -104,6 +105,7 @@ namespace Breakout
                     bricks[x, y] = brick;
                 }
             }
+
             this.bricks = bricks;
             this.totalBricks = bricks.Length;
             Console.WriteLine("Total bricks: {0}", this.totalBricks);
@@ -148,20 +150,16 @@ namespace Breakout
 
             if (!ball.CheckPanelBoundries())
             {
-                Point newPos = this.ball.GetNewPosition();
+                Point pos = ball.GetPosition(),
+                      newPos = this.ball.GetNewPosition();
 
                 if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture)) {
-                    Point pos = ball.GetPosition(),
-                          vel = ball.GetVelocity();
 
-                    int x = pos.X;
+                    int xDiff = Math.Abs(pos.X - newPos.X);
+                    Console.WriteLine("xDiff: {0} | {1}, {2}", xDiff, pos.X, newPos.X);
 
-                    Console.WriteLine("X: {0}, nX: {1}, V: {2}", x, x += vel.X, vel.X);
-
-                    /* for(int x = pos.X; pos.X != newPos.X; x += vel.X)
-                    {
-                        Console.WriteLine("X: {0}", x);
-                    } */
+                    if (!paddle.GetPictureBox().Bounds.IntersectsWith(this.ball.GetPictureBox().Bounds))
+                        ball.SetNewVelocity(paddle);
                 }
 
                 /*if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
@@ -202,7 +200,6 @@ namespace Breakout
                     // so I might aswell just pick the 0 index every time and it won't make a difference.
                     Brick target = collided[0];
 
-                    Console.WriteLine("Collided: {0}", collided.Count);
                     ball.SetNewVelocity(target);
 
                     // Update new position after setting new velocity
@@ -222,6 +219,7 @@ namespace Breakout
                 ball.ResetPosition();
                 this.SetLives(this.lives - 1);
             }
+            this.GamePanel.Invalidate();
         }
 
         private void InsertCoinButton_Click(object sender, EventArgs e)
@@ -232,8 +230,17 @@ namespace Breakout
 
         private void GamePanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if(!paddle.IsDead)
-                paddle.UpdatePosition(e.X - paddle.GetPictureBox().Width / 2, paddle.GetPosition().Y);
+            if (!paddle.IsDead)
+            {
+                PictureBox pictBox = paddle.GetPictureBox();
+
+                int half = pictBox.Width / 2;
+                int newPos = e.X - half;
+
+                if (newPos < 0)
+                    return;
+                paddle.UpdatePosition(newPos, paddle.GetPosition().Y);
+            }
         }
 
         private void DebugButton_Click(object sender, EventArgs e)
