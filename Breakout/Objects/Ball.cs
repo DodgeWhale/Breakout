@@ -96,6 +96,32 @@ namespace Breakout.Objects
                                 (int)(position.Y + (velocity.Y * this.GetSpeed())));
         }
 
+        public bool Intersects(Rectangle rect)
+        {
+            Rectangle ballRect = this.ToRectangle();
+            int ballRadius = 8;
+
+            double rectX = rect.X + rect.Width / 2,
+                   rectY = rect.Y + rect.Height / 2,
+                   circX = ballRect.X + ballRadius,
+                   circY = ballRect.Y + ballRadius,
+                   circDistanceX = Math.Abs(circX - rectX),
+                   circDistanceY = Math.Abs(circY - rectY);
+
+            if (circDistanceX > (rect.Width / 2 + ballRadius) || circDistanceY > (rect.Height / 2 + ballRadius))
+                return false;
+
+            if (circDistanceX <= (rect.Width / 2) || circDistanceY <= (rect.Height / 2))
+                return true;
+
+            double cornerDistance_sq = Math.Pow(circDistanceX - rect.Width / 2, 2) +
+                                 Math.Pow(circDistanceY - rect.Height / 2, 2);
+
+            if (cornerDistance_sq <= Math.Pow(ballRadius, 2))
+                return true;
+            return false;
+        }
+
         /* public int[] Move(int x, int y)
         {
             Point velocity = this.GetVelocity(),

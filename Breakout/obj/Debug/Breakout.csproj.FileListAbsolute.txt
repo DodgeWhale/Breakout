@@ -25,7 +25,6 @@ J:\University\C++\Breakout\Breakout\obj\Debug\Breakout.pdb
 C:\Users\`\Source\Repos\Breakout\Breakout\bin\Debug\Breakout.exe.config
 C:\Users\`\Source\Repos\Breakout\Breakout\bin\Debug\Breakout.exe
 C:\Users\`\Source\Repos\Breakout\Breakout\bin\Debug\Breakout.pdb
-C:\Users\`\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.csprojResolveAssemblyReference.cache
 C:\Users\`\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.GameForm.resources
 C:\Users\`\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.Properties.Resources.resources
 C:\Users\`\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.csproj.GenerateResource.Cache
@@ -51,3 +50,4 @@ C:\Users\b7034135\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.csproj.Gener
 C:\Users\b7034135\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.csproj.CoreCompileInputs.cache
 C:\Users\b7034135\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.exe
 C:\Users\b7034135\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.pdb
+C:\Users\`\Source\Repos\Breakout\Breakout\obj\Debug\Breakout.csprojResolveAssemblyReference.cache

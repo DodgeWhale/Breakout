@@ -124,6 +124,11 @@ namespace Breakout
             this.timer = timer;
         }
 
+        public void intersectsCircle()
+        {
+
+        }
+
         private void TimerTick(object sender, EventArgs e)
         {
             // TODO && lives == 0
@@ -150,10 +155,25 @@ namespace Breakout
             {
                 Point newPos = this.ball.GetNewPosition();
 
-                if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
+                if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture)) {
+                    Point pos = ball.GetPosition(),
+                          vel = ball.GetVelocity();
+
+                    int x = pos.X;
+
+                    Console.WriteLine("X: {0}, nX: {1}, V: {2}", x, x += vel.X, vel.X);
+
+                    /* for(int x = pos.X; pos.X != newPos.X; x += vel.X)
+                    {
+                        Console.WriteLine("X: {0}", x);
+                    } */
+                }
+
+                /*if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
                 {
                     ball.SetNewVelocity(paddle);
-                }
+                }*/
+
                 // Consider creating a method that converts Brick[,] to Brick[] and just foreach it.
                 // I don't think I need the row and column value for anything other than getting the target brick.
                 for (int x = 0; x < columns; x++)

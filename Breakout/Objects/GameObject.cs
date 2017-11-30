@@ -68,11 +68,6 @@ namespace Breakout.Objects
             this.pictureBox = pictureBox;
         }
 
-        public Size GetDimentions()
-        {
-            return new Size(this.GetPictureBox().Width, this.GetPictureBox().Height);
-        }
-
         public void UpdateDimentions(int width, int height)
         {
             this.GetPictureBox().Width = width;
@@ -117,5 +112,10 @@ namespace Breakout.Objects
             return this.GetPanel().Width - (this.GetPictureBox().Left + this.GetPictureBox().Width);
         }
 
+        public Rectangle ToRectangle()
+        {
+            PictureBox pictBox = this.GetPictureBox();
+            return new Rectangle(pictBox.Left, pictBox.Top, pictBox.Width, pictBox.Height);
+        }
     }
 }
