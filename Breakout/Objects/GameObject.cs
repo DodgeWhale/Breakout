@@ -27,6 +27,11 @@ namespace Breakout.Objects
                 this.GetPanel().Controls.Add(this.GetPictureBox());
         }
 
+        public bool CheckCollision(int x, int y, PictureBox target)
+        {
+            return this.GetPictureBox().Bounds.IntersectsWith(new Rectangle(x, y, target.Width, target.Height));
+        }
+
         public bool CheckCollision(PictureBox target)
         {
             return this.GetPictureBox().Bounds.IntersectsWith(target.Bounds);
@@ -41,6 +46,12 @@ namespace Breakout.Objects
         {
             return new Point(this.GetPictureBox().Left, this.GetPictureBox().Top);
         }
+
+        public void UpdatePosition(Point point)
+        {
+            this.UpdatePosition(point.X, point.Y);
+        }
+
         public void UpdatePosition(int x, int y)
         {
             this.GetPictureBox().Left = x;
@@ -99,6 +110,11 @@ namespace Breakout.Objects
 
             this.velocity.X = x;
             this.velocity.Y = y;
+        }
+
+        public int Right()
+        {
+            return this.GetPanel().Width - (this.GetPictureBox().Left + this.GetPictureBox().Width);
         }
 
     }

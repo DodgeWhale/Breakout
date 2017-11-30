@@ -72,14 +72,38 @@ namespace Breakout.Objects
             return false;
         }
 
-        public void Move()
+        public void SetNewVelocity(GameObject collided)
+        {
+            PictureBox pictureBox = collided.GetPictureBox();
+            Point velocity = this.GetVelocity();
+
+            if (this.Right() < pictureBox.Left || this.GetPictureBox().Left > collided.Right())
+            {
+                this.UpdateVelocity(-velocity.X, velocity.Y);
+            }
+            else
+            {
+                this.UpdateVelocity(velocity.X, -velocity.Y);
+            }
+        }
+
+        public Point GetNewPosition()
+        {
+            Point velocity = this.GetVelocity(),
+                position = this.GetPosition();
+
+            return new Point((int)(position.X + (velocity.X * this.GetSpeed())),
+                                (int)(position.Y + (velocity.Y * this.GetSpeed())));
+        }
+
+        /* public int[] Move(int x, int y)
         {
             Point velocity = this.GetVelocity(),
                 position = this.GetPosition();
 
             this.UpdatePosition((int) (position.X + (velocity.X * this.GetSpeed())),
                                 (int) (position.Y + (velocity.Y * this.GetSpeed())));
-        }
+        } */
 
     }
 }

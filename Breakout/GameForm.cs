@@ -18,7 +18,7 @@ namespace Breakout
             points = 0,
             totalPoints = 0;
 
-        int rows = 3, columns = 7;
+        int rows = 3, columns = 7, totalBricks;
 
         public GameForm()
         {
@@ -29,12 +29,10 @@ namespace Breakout
 
             paddle = new Paddle(GamePanel, GamePanel.Width / 2, GamePanel.Height - 20);
             paddle.AddToPanel();
-            paddle.Centre(GamePanel.Height - 20);
+            paddle.Centre(GamePanel.Height - 50);
 
             ball = new Ball(GamePanel, 3); // TODO: Set specific x, y
             ball.AddToPanel();
-
-            Console.WriteLine(TESTMEMES.Left + ", " + TESTMEMES.Right + ", " + TESTMEMES.Top + ", " + TESTMEMES.Bottom);
         }
 
         public void InstertCoin()
@@ -107,6 +105,8 @@ namespace Breakout
                 }
             }
             this.bricks = bricks;
+            this.totalBricks = bricks.Length;
+            Console.WriteLine("Total bricks: {0}", this.totalBricks);
         }
 
         private void RestartTimer()
@@ -128,6 +128,8 @@ namespace Breakout
         {
             // TODO && lives == 0
             // Show insert coin button
+
+            // This isn't really needed
             if(ball == null || ball.IsDead)
             {
                 // You lost
@@ -135,68 +137,75 @@ namespace Breakout
                 this.timer.Stop();
             }
 
-            if(!ball.CheckPanelBoundries())
+            /* if(ball.CheckCollision(paddle.GetPictureBox()))
             {
-                this.ball.Move();
-            } else
+                Point velocity = ball.GetVelocity();
+                ball.UpdateVelocity(velocity.X, -velocity.Y);
+            } // Add else for bricks and panel edges? Can't ever be both right? */
+
+            PictureBox ballPicture = this.ball.GetPictureBox();
+            List<Brick> collided = new List<Brick>();
+
+            if (!ball.CheckPanelBoundries())
+            {
+                Point newPos = this.ball.GetNewPosition();
+
+                if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
+                {
+                    ball.SetNewVelocity(paddle);
+                }
+                // Consider creating a method that converts Brick[,] to Brick[] and just foreach it.
+                // I don't think I need the row and column value for anything other than getting the target brick.
+                for (int x = 0; x < columns; x++)
+                {
+                    for (int y = 0; y < rows; y++)
+                    {
+                        Brick target = bricks[x, y];
+
+                        if (!target.IsDead && target.CheckCollision(newPos.X, newPos.Y, ballPicture))
+                        {
+                            collided.Add(target);
+                            this.totalBricks--;
+                        }
+                    }
+                }
+
+                if (this.totalBricks == 0)
+                {
+                    // You win
+                    this.timer.Stop();
+                }
+
+                // The ball didn't collide with any bricks
+                if (collided.Count == 0)
+                {
+                    ball.UpdatePosition(newPos.X, newPos.Y);
+                }
+                else
+                {
+                    // We don't have to loop through the collided bricks because the outcome will be the same for both
+                    // so I might aswell just pick the 0 index every time and it won't make a difference.
+                    Brick target = collided[0];
+
+                    Console.WriteLine("Collided: {0}", collided.Count);
+                    ball.SetNewVelocity(target);
+
+                    // Update new position after setting new velocity
+                    ball.UpdatePosition(ball.GetNewPosition());
+
+                    // Hide collided bricks
+                    foreach (Brick brick in collided)
+                    {
+                        this.AddPoints(brick.GetColour().GetPoints());
+                        brick.SetDead(true);
+                    }
+                }
+            }
+            else // the ball hit the bottom of the panel past the paddle
             {
                 this.timer.Stop();
                 ball.ResetPosition();
                 this.SetLives(this.lives - 1);
-            }
-
-            if(ball.CheckCollision(paddle.GetPictureBox()))
-            {
-                Point velocity = ball.GetVelocity();
-                ball.UpdateVelocity(velocity.X, -velocity.Y);
-            }
-
-            for (int x = 0; x < columns; x++)
-            {
-                for (int y = 0; y < rows; y++)
-                {
-                    Brick target = bricks[x, y];
-
-                    if(target.CheckCollision(this.ball.GetPictureBox())) {
-                        if (!target.IsDead)
-                        {
-                            this.AddPoints(target.GetColour().GetPoints());
-                            target.SetDead(true);
-
-                            PictureBox brickPicture = target.GetPictureBox();
-                            PictureBox ballPicture = this.ball.GetPictureBox();
-
-                            Point velocity = ball.GetVelocity();
-
-                            Console.WriteLine(ballPicture.Right + ", " + brickPicture.Left);
-                            Console.WriteLine(ballPicture.Left + ", " + brickPicture.Right);
-                            Console.WriteLine("-----");
-
-                            int panelWidth = this.GamePanel.Width,
-                                ballRight = panelWidth - (ballPicture.Left + ballPicture.Width),
-                                brickRight = panelWidth - (brickPicture.Left + brickPicture.Width);
-
-                            // this.timer.Stop();
-
-                            if (ballRight < brickPicture.Left || ballPicture.Left > brickRight)
-                            {
-                                ball.UpdateVelocity(-velocity.X, velocity.Y);
-                            } else
-                            {
-                                ball.UpdateVelocity(velocity.X, -velocity.Y);
-                            }
-
-                            /* if (ballPicture.Left + (ballPicture.Width / 2) < brickPicture.Left
-                                || ballPicture.Right - (ballPicture.Width / 2) < brickPicture.Right)
-                            {
-                                ball.UpdateVelocity(-velocity.X, velocity.Y);
-                            } else
-                            {
-                                ball.UpdateVelocity(velocity.X, -velocity.Y);
-                            } */
-                        }
-                    }
-                }
             }
         }
 
@@ -220,3 +229,52 @@ namespace Breakout
 
     }
 }
+
+
+/* for (int x = 0; x < columns; x++)
+{
+    for (int y = 0; y < rows; y++)
+    {
+        Brick target = bricks[x, y];
+
+        if(target.CheckCollision(ballPicture)) {
+            if (!target.IsDead)
+            {
+                this.AddPoints(target.GetColour().GetPoints());
+                target.SetDead(true);
+
+                PictureBox brickPicture = target.GetPictureBox();
+                Point velocity = ball.GetVelocity();
+
+                Console.WriteLine(ballPicture.Right + ", " + brickPicture.Left);
+                Console.WriteLine(ballPicture.Left + ", " + brickPicture.Right);
+                Console.WriteLine("-----");
+
+                int panelWidth = this.GamePanel.Width,
+                    ballRight = panelWidth - (ballPicture.Left + ballPicture.Width),
+                    brickRight = panelWidth - (brickPicture.Left + brickPicture.Width);
+
+                // this.timer.Stop();
+
+
+
+                if (ballRight < brickPicture.Left || ballPicture.Left > brickRight)
+                {
+                    ball.UpdateVelocity(-velocity.X, velocity.Y);
+                } else
+                {
+                    ball.UpdateVelocity(velocity.X, -velocity.Y);
+                }
+
+                if (ballPicture.Left + (ballPicture.Width / 2) < brickPicture.Left
+                    || ballPicture.Right - (ballPicture.Width / 2) < brickPicture.Right)
+                {
+                    ball.UpdateVelocity(-velocity.X, velocity.Y);
+                } else
+                {
+                    ball.UpdateVelocity(velocity.X, -velocity.Y);
+                }
+            }
+        }
+    }
+} */
