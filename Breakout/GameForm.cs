@@ -54,7 +54,7 @@ namespace Breakout
         {
             this.totalPoints += points;
             this.SetPoints(this.points + points);
-        } 
+        }
 
         public void SetPoints(int points)
         {
@@ -151,9 +151,16 @@ namespace Breakout
             if (!ball.CheckPanelBoundries())
             {
                 Point pos = ball.GetPosition(),
-                      newPos = this.ball.GetNewPosition();
+                      newPos = this.ball.GetNewPosition(),
+                      velocity = ball.GetVelocity();
 
-                if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture)) {
+                if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
+                {
+                    int velX = velocity.X;
+                    for (int x = velX; x != (ball.GetSpeed() * velX + velX); x += velX)
+                    {
+                        Console.WriteLine("X: {0}", x);
+                    }
 
                     int xDiff = Math.Abs(pos.X - newPos.X);
                     Console.WriteLine("xDiff: {0} | {1}, {2}", xDiff, pos.X, newPos.X);
@@ -219,7 +226,6 @@ namespace Breakout
                 ball.ResetPosition();
                 this.SetLives(this.lives - 1);
             }
-            this.GamePanel.Invalidate();
         }
 
         private void InsertCoinButton_Click(object sender, EventArgs e)

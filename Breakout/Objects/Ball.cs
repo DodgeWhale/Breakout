@@ -87,13 +87,18 @@ namespace Breakout.Objects
             }
         }
 
+        public int GetRadius()
+        {
+            return this.GetPictureBox().Width / 2;
+        }
+
         public Point GetNewPosition()
         {
             Point velocity = this.GetVelocity(),
                 position = this.GetPosition();
 
-            return new Point((int)(position.X + (velocity.X * this.GetSpeed())),
-                                (int)(position.Y + (velocity.Y * this.GetSpeed())));
+            return new Point((int)((position.X + velocity.X) + (velocity.X * this.GetSpeed())),
+                                (int)((position.Y + velocity.Y) + (velocity.Y * this.GetSpeed())));
         }
 
         public bool Intersects(Rectangle rect)

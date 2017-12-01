@@ -44,7 +44,8 @@ namespace Breakout.Objects
 
         public Point GetPosition()
         {
-            return new Point(this.GetPictureBox().Left, this.GetPictureBox().Top);
+            PictureBox pictBox = this.GetPictureBox();
+            return new Point(pictBox.Left, pictBox.Top);
         }
 
         public void UpdatePosition(Point point)
@@ -54,8 +55,10 @@ namespace Breakout.Objects
 
         public void UpdatePosition(int x, int y)
         {
-            this.GetPictureBox().Left = x;
-            this.GetPictureBox().Top = y;
+            PictureBox pictBox = this.GetPictureBox();
+
+            pictBox.Left = x - pictBox.Width / 2;
+            pictBox.Top = y - pictBox.Height / 2;
         }
 
         public PictureBox GetPictureBox()
