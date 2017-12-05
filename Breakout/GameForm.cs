@@ -150,11 +150,11 @@ namespace Breakout
 
             if (!ball.CheckPanelBoundries())
             {
-                Point pos = ball.GetPosition(),
-                      newPos = this.ball.GetNewPosition(),
+                Point pos = ball.GetCenterPosition(),
+                      nextPos = this.ball.GetNewPosition(),
                       velocity = ball.GetVelocity();
 
-                if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
+                if (paddle.CheckCollision(nextPos.X, nextPos.Y, ballPicture))
                 {
                     int velX = velocity.X;
                     for (int x = velX; x != (ball.GetSpeed() * velX + velX); x += velX)
@@ -162,17 +162,12 @@ namespace Breakout
                         Console.WriteLine("X: {0}", x);
                     }
 
-                    int xDiff = Math.Abs(pos.X - newPos.X);
-                    Console.WriteLine("xDiff: {0} | {1}, {2}", xDiff, pos.X, newPos.X);
+                    int xDiff = Math.Abs(pos.X - nextPos.X);
+                    Console.WriteLine("xDiff: {0} | {1}, {2}", xDiff, pos.X, nextPos.X);
 
                     if (!paddle.GetPictureBox().Bounds.IntersectsWith(this.ball.GetPictureBox().Bounds))
                         ball.SetNewVelocity(paddle);
                 }
-
-                /*if (paddle.CheckCollision(newPos.X, newPos.Y, ballPicture))
-                {
-                    ball.SetNewVelocity(paddle);
-                }*/
 
                 // Consider creating a method that converts Brick[,] to Brick[] and just foreach it.
                 // I don't think I need the row and column value for anything other than getting the target brick.
@@ -182,7 +177,7 @@ namespace Breakout
                     {
                         Brick target = bricks[x, y];
 
-                        if (!target.IsDead && target.CheckCollision(newPos.X, newPos.Y, ballPicture))
+                        if (!target.IsDead && target.CheckCollision(nextPos.X, nextPos.Y, ballPicture))
                         {
                             collided.Add(target);
                             this.totalBricks--;
@@ -199,7 +194,7 @@ namespace Breakout
                 // The ball didn't collide with any bricks
                 if (collided.Count == 0)
                 {
-                    ball.UpdatePosition(newPos.X, newPos.Y);
+                    ball.UpdateCenter(nextPos.X, nextPos.Y);
                 }
                 else
                 {
@@ -210,7 +205,10 @@ namespace Breakout
                     ball.SetNewVelocity(target);
 
                     // Update new position after setting new velocity
-                    ball.UpdatePosition(ball.GetNewPosition());
+                    ball.UpdateCenter(ball.GetNewPosition());
+
+                    Point testVel = ball.GetVelocity();
+                    Console.WriteLine("velX: {0}, velY: {1}", testVel.X, testVel.Y);
 
                     // Hide collided bricks
                     foreach (Brick brick in collided)

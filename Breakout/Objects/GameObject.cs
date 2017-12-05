@@ -57,8 +57,8 @@ namespace Breakout.Objects
         {
             PictureBox pictBox = this.GetPictureBox();
 
-            pictBox.Left = x - pictBox.Width / 2;
-            pictBox.Top = y - pictBox.Height / 2;
+            pictBox.Left = x;
+            pictBox.Top = y;
         }
 
         public PictureBox GetPictureBox()

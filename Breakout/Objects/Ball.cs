@@ -92,13 +92,21 @@ namespace Breakout.Objects
             return this.GetPictureBox().Width / 2;
         }
 
+        public Point GetCenterPosition()
+        {
+            Point point = this.GetPosition();
+            int radius = this.GetRadius();
+
+            return new Point(point.X - radius, point.Y - radius);
+        }
+
         public Point GetNewPosition()
         {
             Point velocity = this.GetVelocity(),
-                position = this.GetPosition();
+                position = this.GetCenterPosition();
 
-            return new Point((int)((position.X + velocity.X) + (velocity.X * this.GetSpeed())),
-                                (int)((position.Y + velocity.Y) + (velocity.Y * this.GetSpeed())));
+            return new Point((int)(position.X + (velocity.X * this.GetSpeed())),
+                                (int)(position.Y + (velocity.Y * this.GetSpeed())));
         }
 
         public bool Intersects(Rectangle rect)
@@ -125,6 +133,16 @@ namespace Breakout.Objects
             if (cornerDistance_sq <= Math.Pow(ballRadius, 2))
                 return true;
             return false;
+        }
+
+        public void UpdateCenter(Point point)
+        {
+            this.UpdatePosition(point.X, point.Y);
+        }
+
+        public void UpdateCenter(int x, int y) {
+            int radius = this.GetRadius();
+            this.UpdatePosition(x - radius, y - radius);
         }
 
         /* public int[] Move(int x, int y)
