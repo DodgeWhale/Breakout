@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Media;
 using System.Windows.Forms;
 
 namespace Breakout
@@ -31,14 +33,15 @@ namespace Breakout
             paddle.AddToPanel();
             paddle.Centre(GamePanel.Height - 50);
 
-            ball = new Ball(GamePanel, 3); // TODO: Set specific x, y
+            ball = new Ball(GamePanel, 3);
             ball.AddToPanel();
+            ball.Centre();
         }
 
         // Consider putting "Insert coin" in either a new panel or a different form entirely
         public void InstertCoin()
         {
-            SetLives(1); // Start
+            SetLives(5); // Start
             SetPoints(0);
             ResetGame();
             InitializeBricks();
@@ -47,7 +50,26 @@ namespace Breakout
 
         public void ResetGame()
         {
+            this.totalPoints = 0;
             ball.ResetPosition();
+        }
+
+        public void GameOver(bool win)
+        {
+            if (this.timer != null)
+            {
+                this.timer.Stop();
+            }
+
+            // Show menu panel
+            MenuPanel.Visible = true;
+
+            // Display information based on win or lose clause
+            MessageLabel.Text = (win ? "Great job!" : "Better luck next time!") + " You scored a total of " + totalPoints + " points.";
+            MenuPanel.BackColor = win ? Color.FromArgb(155, 208, 240) : Color.FromArgb(209, 69, 69);
+
+            Stream wav = win ? Properties.Resources.Win : Properties.Resources.Lose;
+            this.PlaySound(wav);
         }
 
         public void AddPoints(int points)
@@ -65,24 +87,47 @@ namespace Breakout
             {
                 this.points -= lifeRate;
                 SetLives(this.lives + 1);
+
+                this.PlaySound(Properties.Resources.Life);
             }
 
-            lbl_Points.Text = "Points: " + this.points;
+            lbl_Points.Text = "" + this.points;
         }
 
         public void SetLives(int lives)
         {
             this.lives = lives;
-            lbl_Lives.Text = "Lives: " + lives;
+            lbl_Lives.Text = "" + lives;
 
             if(lives <= 0)
             {
-                ResetGame();
+                GameOver(false);
+            }
+        }
+
+        private SoundPlayer player = new SoundPlayer();
+        public void PlaySound(Stream sound)
+        {
+            try
+            {
+                // Resetting the position and stream is to avoid "InvalidOperationException"
+                // But just to be safe, I've added a try/catch too.
+                sound.Position = 0;
+                player.Stream = null;
+                player.Stream = sound;
+                player.Play();
+            } catch (InvalidOperationException)
+            {
+                Console.WriteLine("Error playing sound.");
             }
         }
 
         public void InitializeBricks()
         {
+            Random rand = new Random();
+            this.rows = rand.Next(3, 5);
+            this.columns = rand.Next(6, 8);
+
             // Clears the old bricks from the GamePanel for when the level is reset
             // if the current array isn't empty
             if (this.bricks != null)
@@ -104,7 +149,7 @@ namespace Breakout
             {
                 for(int y = 0; y < rows; y++)
                 {
-                    Brick brick = new Brick(GamePanel, margin + (x * (width + padding)), margin + (y * (height + padding)), width, height);
+                    Brick brick = new Brick(GamePanel, margin + (x * (width + padding)), margin / 2 + (y * (height + padding)), width, height);
                     brick.AddToPanel();
 
                     bricks[x, y] = brick; // Add to array
@@ -132,6 +177,16 @@ namespace Breakout
             this.timer = timer;
         }
 
+        private void ContinueButton_Click(object sender, EventArgs e)
+        {
+            this.timer.Start();
+            ContinueButton.Visible = false;
+            this.PlaySound(Properties.Resources.Life);
+        }
+
+        // Initialized outside of Timer to improve efficiency
+        private List<Brick> collided = new List<Brick>();
+
         private void TimerTick(object sender, EventArgs e)
         {
             // TODO && lives == 0
@@ -141,38 +196,20 @@ namespace Breakout
             if(ball == null || ball.IsDead)
             {
                 // You lost
-                Console.WriteLine("You lost.");
-                this.timer.Stop();
+                GameOver(false);
             }
-
-            /* if(ball.CheckCollision(paddle.GetPictureBox()))
-            {
-                Point velocity = ball.GetVelocity();
-                ball.UpdateVelocity(velocity.X, -velocity.Y);
-            } // Add else for bricks and panel edges? Can't ever be both right? */
-
-            PictureBox ballPicture = this.ball.GetPictureBox();
-            List<Brick> collided = new List<Brick>();
 
             if (!ball.CheckPanelBoundries())
             {
-                Point pos = ball.GetCenterPosition(),
+                PictureBox ballPicture = this.ball.GetPictureBox();
+
+                Point pos = ball.GetPosition(),
                       nextPos = this.ball.GetNewPosition(),
                       velocity = ball.GetVelocity();
 
                 if (paddle.CheckCollision(nextPos.X, nextPos.Y, ballPicture))
                 {
-                    int velX = velocity.X;
-                    for (int x = velX; x != (ball.GetSpeed() * velX + velX); x += velX)
-                    {
-                        Console.WriteLine("X: {0}", x);
-                    }
-
-                    int xDiff = Math.Abs(pos.X - nextPos.X);
-                    Console.WriteLine("xDiff: {0} | {1}, {2}", xDiff, pos.X, nextPos.X);
-
-                    if (!paddle.GetPictureBox().Bounds.IntersectsWith(this.ball.GetPictureBox().Bounds))
-                        ball.SetNewVelocity(paddle);
+                    ball.SetNewVelocity(paddle);
                 }
 
                 // Consider creating a method that converts Brick[,] to Brick[] and just foreach it.
@@ -194,7 +231,7 @@ namespace Breakout
                 if (this.totalBricks == 0)
                 {
                     // You win
-                    this.timer.Stop();
+                    GameOver(true);
                 }
 
                 // The ball didn't collide with any bricks
@@ -213,8 +250,7 @@ namespace Breakout
                     // Update new position after setting new velocity
                     ball.UpdatePosition(ball.GetNewPosition());
 
-                    Point testVel = ball.GetVelocity();
-                    Console.WriteLine("velX: {0}, velY: {1}", testVel.X, testVel.Y);
+                    this.PlaySound(Properties.Resources.Brick);
 
                     // Hide collided bricks
                     foreach (Brick brick in collided)
@@ -223,90 +259,45 @@ namespace Breakout
                         brick.SetDead(true);
                     }
                 }
+
+                // Empty the collided list
+                collided.Clear();
             }
             else // the ball hit the bottom of the panel past the paddle
             {
+                this.PlaySound(Properties.Resources.Death);
+
                 this.timer.Stop();
-                ball.ResetPosition();
                 this.SetLives(this.lives - 1);
+
+                ball.ResetPosition();
+                ContinueButton.Visible = true;
             }
         }
 
         private void InsertCoinButton_Click(object sender, EventArgs e)
         {
-            if(this.lives == 0)
-                InstertCoin();
+            InstertCoin();
+            MenuPanel.Visible = false;
         }
 
         private void GamePanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!paddle.IsDead)
+            if (timer == null) return;
+
+            if (timer.Enabled && !ball.IsDead)
             {
                 PictureBox pictBox = paddle.GetPictureBox();
 
                 int half = pictBox.Width / 2;
                 int newPos = e.X - half;
 
-                if (newPos < 0)
+                if (newPos < 0 || ball.CheckCollision(new Rectangle(newPos, paddle.GetPosition().Y, pictBox.Width, pictBox.Height)))
                     return;
+
                 paddle.UpdatePosition(newPos, paddle.GetPosition().Y);
             }
         }
 
-        private void DebugButton_Click(object sender, EventArgs e)
-        {
-            this.ball.Centre(this.Height / 2);
-            this.ball.SetVelocity(Int32.Parse(TextBox_X.Text), Int32.Parse(TextBox_Y.Text));
-        }
-
     }
 }
-
-
-/* for (int x = 0; x < columns; x++)
-{
-    for (int y = 0; y < rows; y++)
-    {
-        Brick target = bricks[x, y];
-
-        if(target.CheckCollision(ballPicture)) {
-            if (!target.IsDead)
-            {
-                this.AddPoints(target.GetColour().GetPoints());
-                target.SetDead(true);
-
-                PictureBox brickPicture = target.GetPictureBox();
-                Point velocity = ball.GetVelocity();
-
-                Console.WriteLine(ballPicture.Right + ", " + brickPicture.Left);
-                Console.WriteLine(ballPicture.Left + ", " + brickPicture.Right);
-                Console.WriteLine("-----");
-
-                int panelWidth = this.GamePanel.Width,
-                    ballRight = panelWidth - (ballPicture.Left + ballPicture.Width),
-                    brickRight = panelWidth - (brickPicture.Left + brickPicture.Width);
-
-                // this.timer.Stop();
-
-
-
-                if (ballRight < brickPicture.Left || ballPicture.Left > brickRight)
-                {
-                    ball.UpdateVelocity(-velocity.X, velocity.Y);
-                } else
-                {
-                    ball.UpdateVelocity(velocity.X, -velocity.Y);
-                }
-
-                if (ballPicture.Left + (ballPicture.Width / 2) < brickPicture.Left
-                    || ballPicture.Right - (ballPicture.Width / 2) < brickPicture.Right)
-                {
-                    ball.UpdateVelocity(-velocity.X, velocity.Y);
-                } else
-                {
-                    ball.UpdateVelocity(velocity.X, -velocity.Y);
-                }
-            }
-        }
-    }
-} */

@@ -24,7 +24,7 @@ namespace Breakout.Objects
                 BackgroundImage = ballImg,
                 BackColor = Color.Transparent
             });
-            
+
             this.speed = speed;
             this.ResetPosition();
         }
@@ -76,7 +76,9 @@ namespace Breakout.Objects
             PictureBox pictureBox = collided.GetPictureBox();
             Point velocity = this.GetVelocity();
 
-            if (this.Right() < pictureBox.Left || this.GetPictureBox().Left > collided.Right())
+            int x = this.GetPosition().X;
+
+            if (pictureBox.Left > (x + this.GetPictureBox().Width - this.speed) || (pictureBox.Left + pictureBox.Width - this.speed) < x)
             {
                 this.UpdateVelocity(-velocity.X, velocity.Y);
             }
@@ -133,25 +135,6 @@ namespace Breakout.Objects
                 return true;
             return false;
         }
-
-        public void UpdateCenter(Point point)
-        {
-            this.UpdateCenter(point.X, point.Y);
-        }
-
-        public void UpdateCenter(int x, int y) {
-            int radius = this.GetRadius();
-            this.UpdatePosition(x - radius, y - radius);
-        }
-
-        /* public int[] Move(int x, int y)
-        {
-            Point velocity = this.GetVelocity(),
-                position = this.GetPosition();
-
-            this.UpdatePosition((int) (position.X + (velocity.X * this.GetSpeed())),
-                                (int) (position.Y + (velocity.Y * this.GetSpeed())));
-        } */
 
     }
 }

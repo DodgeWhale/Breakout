@@ -32,6 +32,11 @@ namespace Breakout.Objects
             return this.GetPictureBox().Bounds.IntersectsWith(new Rectangle(x, y, target.Width, target.Height));
         }
 
+        public bool CheckCollision(Rectangle bounds)
+        {
+            return this.GetPictureBox().Bounds.IntersectsWith(bounds);
+        }
+
         public bool CheckCollision(PictureBox target)
         {
             return this.GetPictureBox().Bounds.IntersectsWith(target.Bounds);
@@ -84,7 +89,13 @@ namespace Breakout.Objects
 
         public void Centre(int y)
         {
-            this.UpdatePosition((panel.Width - this.GetPictureBox().Width / 2) / 2, y);
+            this.UpdatePosition((panel.Width / 2) - this.GetPictureBox().Width / 2, y);
+        }
+
+        public void Centre()
+        {
+            this.UpdatePosition((panel.Width / 2) - this.GetPictureBox().Width / 2,
+                (panel.Height / 2) - this.GetPictureBox().Height / 2);
         }
 
         public Point GetVelocity()
@@ -92,12 +103,6 @@ namespace Breakout.Objects
             return this.velocity;
         }
         
-        // TEMP
-        public void SetVelocity(int x, int y)
-        {
-            this.velocity = new Point(x, y);
-        }
-
         public void RandomVelocity()
         {
             Random random = new Random();
