@@ -36,8 +36,7 @@ namespace Breakout.Objects
 
         public void ResetPosition()
         {
-            Panel panel = this.GetPanel();
-            this.Centre(panel.Height - 100);
+            this.Centre(this.GetPanel().Height / 2);
             this.RandomVelocity();
         }
 
@@ -103,7 +102,7 @@ namespace Breakout.Objects
         public Point GetNewPosition()
         {
             Point velocity = this.GetVelocity(),
-                position = this.GetCenterPosition();
+                position = this.GetPosition();
 
             return new Point((int)(position.X + (velocity.X * this.GetSpeed())),
                                 (int)(position.Y + (velocity.Y * this.GetSpeed())));
@@ -137,7 +136,7 @@ namespace Breakout.Objects
 
         public void UpdateCenter(Point point)
         {
-            this.UpdatePosition(point.X, point.Y);
+            this.UpdateCenter(point.X, point.Y);
         }
 
         public void UpdateCenter(int x, int y) {

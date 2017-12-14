@@ -33,10 +33,13 @@
             this.InsertCoinButton = new System.Windows.Forms.Button();
             this.lbl_Points = new System.Windows.Forms.Label();
             this.lbl_Lives = new System.Windows.Forms.Label();
+            this.TextBox_X = new System.Windows.Forms.TextBox();
+            this.TextBox_Y = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // GamePanel
             // 
+            this.GamePanel.BackColor = System.Drawing.Color.Black;
             this.GamePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GamePanel.Location = new System.Drawing.Point(12, 12);
             this.GamePanel.Name = "GamePanel";
@@ -84,11 +87,27 @@
             this.lbl_Lives.TabIndex = 4;
             this.lbl_Lives.Text = "Lives: 0";
             // 
+            // TextBox_X
+            // 
+            this.TextBox_X.Location = new System.Drawing.Point(12, 412);
+            this.TextBox_X.Name = "TextBox_X";
+            this.TextBox_X.Size = new System.Drawing.Size(100, 20);
+            this.TextBox_X.TabIndex = 5;
+            // 
+            // TextBox_Y
+            // 
+            this.TextBox_Y.Location = new System.Drawing.Point(12, 438);
+            this.TextBox_Y.Name = "TextBox_Y";
+            this.TextBox_Y.Size = new System.Drawing.Size(100, 20);
+            this.TextBox_Y.TabIndex = 6;
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 420);
+            this.ClientSize = new System.Drawing.Size(509, 472);
+            this.Controls.Add(this.TextBox_Y);
+            this.Controls.Add(this.TextBox_X);
             this.Controls.Add(this.lbl_Lives);
             this.Controls.Add(this.lbl_Points);
             this.Controls.Add(this.InsertCoinButton);
@@ -109,6 +128,8 @@
         private System.Windows.Forms.Button InsertCoinButton;
         private System.Windows.Forms.Label lbl_Points;
         private System.Windows.Forms.Label lbl_Lives;
+        private System.Windows.Forms.TextBox TextBox_X;
+        private System.Windows.Forms.TextBox TextBox_Y;
     }
 }
 

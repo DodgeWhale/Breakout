@@ -91,6 +91,12 @@ namespace Breakout.Objects
         {
             return this.velocity;
         }
+        
+        // TEMP
+        public void SetVelocity(int x, int y)
+        {
+            this.velocity = new Point(x, y);
+        }
 
         public void RandomVelocity()
         {

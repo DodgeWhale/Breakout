@@ -12,7 +12,7 @@ namespace Breakout.Objects
         public BrickColour colour;
 
         private static Random random = new Random();
-        private static BrickColour[] colours = { BrickColour.BLACK, BrickColour.BLUE, BrickColour.GREEN, BrickColour.RED, BrickColour.YELLOW };
+        private static BrickColour[] colours = { BrickColour.ORANGE, BrickColour.BLUE, BrickColour.GREEN, BrickColour.RED, BrickColour.YELLOW };
 
         public Brick(Panel panel, int x, int y, int width, int height) : base(panel, null)
         {

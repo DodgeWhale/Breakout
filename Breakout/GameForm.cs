@@ -84,6 +84,7 @@ namespace Breakout
         public void InitializeBricks()
         {
             // Clears the old bricks from the GamePanel for when the level is reset
+            // if the current array isn't empty
             if (this.bricks != null)
             {
                 foreach (Brick brick in this.bricks)
@@ -92,27 +93,32 @@ namespace Breakout
                 }
             }
 
+            // Create new Brick 2d array
             Brick[,] bricks = new Brick[columns, rows];
-            int padding = 10;
 
-            for(int x = 0; x < columns; x++)
+            int width = 54, height = 22, padding = 10,
+                margin = (GamePanel.Width - ((width + padding) * columns)) / 2;
+
+            // Iterate through columns and rows
+            for (int x = 0; x < columns; x++)
             {
                 for(int y = 0; y < rows; y++)
                 {
-                    Brick brick = new Brick(GamePanel, x * 35 + (padding * (x + 1)), y * 15 + (padding * (y + 1)), 35, 15);
+                    Brick brick = new Brick(GamePanel, margin + (x * (width + padding)), margin + (y * (height + padding)), width, height);
                     brick.AddToPanel();
 
-                    bricks[x, y] = brick;
+                    bricks[x, y] = brick; // Add to array
                 }
             }
 
+            // Assign variables
             this.bricks = bricks;
             this.totalBricks = bricks.Length;
-            Console.WriteLine("Total bricks: {0}", this.totalBricks);
         }
 
         private void RestartTimer()
         {
+            // If the timer is currently running, stop it
             if(this.timer != null && this.timer.Enabled)
                 this.timer.Stop();
 
@@ -194,7 +200,7 @@ namespace Breakout
                 // The ball didn't collide with any bricks
                 if (collided.Count == 0)
                 {
-                    ball.UpdateCenter(nextPos.X, nextPos.Y);
+                    ball.UpdatePosition(nextPos.X, nextPos.Y);
                 }
                 else
                 {
@@ -205,7 +211,7 @@ namespace Breakout
                     ball.SetNewVelocity(target);
 
                     // Update new position after setting new velocity
-                    ball.UpdateCenter(ball.GetNewPosition());
+                    ball.UpdatePosition(ball.GetNewPosition());
 
                     Point testVel = ball.GetVelocity();
                     Console.WriteLine("velX: {0}, velY: {1}", testVel.X, testVel.Y);
@@ -249,8 +255,8 @@ namespace Breakout
 
         private void DebugButton_Click(object sender, EventArgs e)
         {
-            this.rows = 4;
-            this.columns = 9;
+            this.ball.Centre(this.Height / 2);
+            this.ball.SetVelocity(Int32.Parse(TextBox_X.Text), Int32.Parse(TextBox_Y.Text));
         }
 
     }
