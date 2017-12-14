@@ -131,5 +131,10 @@ namespace Breakout.Objects
             PictureBox pictBox = this.GetPictureBox();
             return new Rectangle(pictBox.Left, pictBox.Top, pictBox.Width, pictBox.Height);
         }
+
+        public void RemoveFromPanel()
+        {
+            this.GetPanel().Controls.Remove(this.GetPictureBox());
+        }
     }
 }

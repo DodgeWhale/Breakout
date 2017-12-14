@@ -52,6 +52,12 @@ namespace Breakout
         {
             this.totalPoints = 0;
             ball.ResetPosition();
+
+            if(this.cherry != null)
+            {
+                this.cherry.RemoveFromPanel();
+                this.cherry = null;
+            }
         }
 
         public void GameOver(bool win)
@@ -133,7 +139,7 @@ namespace Breakout
             {
                 foreach (Brick brick in this.bricks)
                 {
-                    this.GamePanel.Controls.Remove(brick.GetPictureBox());
+                    brick.RemoveFromPanel();
                 }
             }
 
@@ -215,7 +221,7 @@ namespace Breakout
                 if (cherry != null) {
                     if (cherry.CheckCollision(nextPos.X, nextPos.Y, ballPicture))
                     {
-                        this.GamePanel.Controls.Remove(cherry.GetPictureBox());
+                        cherry.RemoveFromPanel();
                         cherry = null;
 
                         ball.SpeedBoost(4.20);
