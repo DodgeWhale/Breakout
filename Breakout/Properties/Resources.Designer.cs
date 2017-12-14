@@ -89,6 +89,16 @@ namespace Breakout.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Cherry {
+            get {
+                object obj = ResourceManager.GetObject("Cherry", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Death {
@@ -121,6 +131,16 @@ namespace Breakout.Properties {
         internal static System.Drawing.Bitmap Paddle {
             get {
                 object obj = ResourceManager.GetObject("Paddle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RedBall {
+            get {
+                object obj = ResourceManager.GetObject("RedBall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

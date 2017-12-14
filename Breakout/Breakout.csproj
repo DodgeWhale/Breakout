@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Objects\Ball.cs" />
     <Compile Include="Objects\Brick.cs" />
+    <Compile Include="Objects\Cherry.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\Paddle.cs" />
     <Compile Include="Program.cs" />
@@ -118,9 +119,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\Space.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Textures\Title.png" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +126,9 @@
     <Content Include="Audio\Brick.wav" />
     <Content Include="Audio\Death.wav" />
     <Content Include="Audio\Life.wav" />
+    <None Include="Audio\Lose - Copy.wav" />
+    <None Include="Textures\RedBall.png" />
+    <None Include="Textures\Cherry.png" />
     <None Include="Audio\Win.wav" />
     <None Include="Audio\Lose.wav" />
   </ItemGroup>

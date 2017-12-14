@@ -34,6 +34,16 @@ namespace Breakout.Objects
             return this.speed;
         }
 
+        public async void SpeedBoost(double newSpeed)
+        {
+            this.speed = newSpeed;
+            this.GetPictureBox().BackgroundImage = Properties.Resources.RedBall;
+
+            await Task.Delay(6500);
+            this.speed = 3;
+            this.GetPictureBox().BackgroundImage = Properties.Resources.Ball;
+        }
+
         public void ResetPosition()
         {
             this.Centre(this.GetPanel().Height / 2);

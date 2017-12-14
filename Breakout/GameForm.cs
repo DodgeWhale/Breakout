@@ -113,12 +113,11 @@ namespace Breakout
                 // Resetting the position and stream is to avoid "InvalidOperationException"
                 // But just to be safe, I've added a try/catch too.
                 sound.Position = 0;
-                player.Stream = null;
                 player.Stream = sound;
                 player.Play();
             } catch (InvalidOperationException)
             {
-                Console.WriteLine("Error playing sound.");
+                Console.WriteLine("Error playing sound {0}.", sound.ToString());
             }
         }
 
@@ -149,7 +148,7 @@ namespace Breakout
             {
                 for(int y = 0; y < rows; y++)
                 {
-                    Brick brick = new Brick(GamePanel, margin + (x * (width + padding)), margin / 2 + (y * (height + padding)), width, height);
+                    Brick brick = new Brick(GamePanel, margin + (x * (width + padding)), margin / 3 + (y * (height + padding)), width, height);
                     brick.AddToPanel();
 
                     bricks[x, y] = brick; // Add to array
@@ -186,6 +185,7 @@ namespace Breakout
 
         // Initialized outside of Timer to improve efficiency
         private List<Brick> collided = new List<Brick>();
+        private Cherry cherry;
 
         private void TimerTick(object sender, EventArgs e)
         {
@@ -210,6 +210,16 @@ namespace Breakout
                 if (paddle.CheckCollision(nextPos.X, nextPos.Y, ballPicture))
                 {
                     ball.SetNewVelocity(paddle);
+                }
+
+                if (cherry != null) {
+                    if (cherry.CheckCollision(nextPos.X, nextPos.Y, ballPicture))
+                    {
+                        this.GamePanel.Controls.Remove(cherry.GetPictureBox());
+                        cherry = null;
+
+                        ball.SpeedBoost(4.20);
+                    }
                 }
 
                 // Consider creating a method that converts Brick[,] to Brick[] and just foreach it.
@@ -255,7 +265,22 @@ namespace Breakout
                     // Hide collided bricks
                     foreach (Brick brick in collided)
                     {
-                        this.AddPoints(brick.GetColour().GetPoints());
+                        BrickColour colour = brick.GetColour();
+
+                        if(colour.Equals(BrickColour.RED))
+                        {
+                            if (cherry == null)
+                            {
+                                // Random chance to spawn a Cherry
+                                Random rand = new Random();
+                                if (rand.Next(0, 2) == 0) // 1 in 3 chance
+                                {
+                                    cherry = new Cherry(GamePanel);
+                                }
+                            }
+                        }
+
+                        this.AddPoints(colour.GetPoints());
                         brick.SetDead(true);
                     }
                 }
